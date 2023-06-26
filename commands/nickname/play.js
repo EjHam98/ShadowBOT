@@ -5,11 +5,15 @@ module.exports = {
 		.setName('play')
 		.setDescription('Add/remove the spectator ! tag'),
 	async execute(interaction) {
-		if (interaction.member.nickname.startsWith("!")){
-			var newUsername = interaction.member.nickname.substring(1);
+		var tag = "!";
+
+		var baseNickname = getBaseNickname(interaction.member.nickname, tag)
+
+		if (baseNickname.startsWith(tag)){
+			var newNickname = baseNickname.substring(tag.length);
 			try {
-				await interaction.member.setNickname(newUsername);
-				await interaction.reply(`${newUsername} is playing.`);
+				await interaction.member.setNickname(newNickname);
+				await interaction.reply(`${newNickname} is now playing.`);
 			} 
 			catch (error) {
 				console.error(error);
@@ -17,10 +21,10 @@ module.exports = {
 			}
 		}
 		else{
-			var newUsername = `!${interaction.member.nickname}`;
+			var newNickname = `${tag}${baseNickname}`;
 			try {
-				await interaction.member.setNickname(newUsername);
-				await interaction.reply(`${newUsername} is spectating.`);
+				await interaction.member.setNickname(newNickname);
+				await interaction.reply(`${newNickname} is now spectating.`);
 			} 
 			catch (error) {
 				console.error(error);
@@ -29,3 +33,14 @@ module.exports = {
 		}
 	},
 };
+
+function getBaseNickname(str, tag) {
+	substrings = ["(ST) ", "(Co-ST) ", "(T) ", "!"];
+	substrings.forEach(substring => {
+		if (str.startsWith(substring) && substring != tag) {
+			str = str.substring(substring.length);
+		}
+	});
+	return str;
+}
+  

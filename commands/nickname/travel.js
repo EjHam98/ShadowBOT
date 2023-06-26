@@ -2,10 +2,10 @@ const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('storytell')
-		.setDescription('Add/remove the Storyteller (ST) tag'),
+		.setName('travel')
+		.setDescription('Add/remove the Traveller (Co-ST) tag'),
 	async execute(interaction) {
-		var tag = "(ST) ";
+		var tag = "(T) ";
 
 		var baseNickname = getBaseNickname(interaction.member.nickname, tag)
 
@@ -13,7 +13,7 @@ module.exports = {
 			var newNickname = baseNickname.substring(tag.length);
 			try {
 				await interaction.member.setNickname(newNickname);
-				await interaction.reply(`${newNickname} is no longer the ST.`);
+				await interaction.reply(`${newNickname} is travelling out.`);
 			} 
 			catch (error) {
 				console.error(error);
@@ -24,7 +24,7 @@ module.exports = {
 			var newNickname = `${tag}${baseNickname}`;
 			try {
 				await interaction.member.setNickname(newNickname);
-				await interaction.reply(`${newNickname} is now the ST.`);
+				await interaction.reply(`${newNickname} is now travelling in.`);
 			} 
 			catch (error) {
 				console.error(error);
