@@ -2,14 +2,14 @@ const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('storytell')
-		.setDescription('Add/remove the Storyteller (ST) tag'),
+		.setName('play')
+		.setDescription('Add/remove the spectator ! tag'),
 	async execute(interaction) {
-		if (interaction.member.nickname.startsWith("(ST) ")){
-			var newUsername = interaction.member.nickname.substring(5);
+		if (interaction.member.nickname.startsWith("!")){
+			var newUsername = interaction.member.nickname.substring(1);
 			try {
 				await interaction.member.setNickname(newUsername);
-				await interaction.reply(`${interaction.member.nickname} is no longer the ST.`);
+				await interaction.reply(`${newUsername} is playing.`);
 			} 
 			catch (error) {
 				console.error(error);
@@ -17,10 +17,10 @@ module.exports = {
 			}
 		}
 		else{
-			var newUsername = `(ST) ${interaction.member.nickname}`;
+			var newUsername = `!${interaction.member.nickname}`;
 			try {
 				await interaction.member.setNickname(newUsername);
-				await interaction.reply(`${interaction.member.nickname} is now the ST.`);
+				await interaction.reply(`${newUsername} is spectating.`);
 			} 
 			catch (error) {
 				console.error(error);
