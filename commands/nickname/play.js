@@ -3,41 +3,24 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('play')
-		.setDescription('Add/remove the spectator ! tag'),
+		.setDescription('Remove all tags to join as a player'),
 	async execute(interaction) {
-		var tag = "!";
-
 		var baseNickname = getBaseNickname(interaction.member.nickname, tag)
-
-		if (baseNickname.startsWith(tag)){
-			var newNickname = baseNickname.substring(tag.length);
-			try {
-				await interaction.member.setNickname(newNickname);
-				await interaction.reply(`${newNickname} is now playing.`);
-			} 
-			catch (error) {
-				console.error(error);
-				await interaction.reply('Failed to update username.');
-			}
-		}
-		else{
-			var newNickname = `${tag}${baseNickname}`;
-			try {
-				await interaction.member.setNickname(newNickname);
-				await interaction.reply(`${newNickname} is now spectating.`);
-			} 
-			catch (error) {
-				console.error(error);
-				await interaction.reply('Failed to update username.');
-			}
+		try {
+			await interaction.member.setNickname(baseNickname);
+			await interaction.reply(`${baseNickname} is now playing.`);
+		} 
+		catch (error) {
+			console.error(error);
+			await interaction.reply('Failed to update username.');
 		}
 	},
 };
 
-function getBaseNickname(str, tag) {
-	substrings = ["(ST) ", "(Co-ST) ", "(T) ", "!"];
+function getBaseNickname(str) {
+	substrings = ["(ST) ", "[ST] ", "(Co-ST) ", "(CoST) ", "[Co-ST] ", "[CoST] ", "(T) ", "[T] ", "!"];
 	substrings.forEach(substring => {
-		if (str.startsWith(substring) && substring != tag) {
+		if (str.startsWith(substring)) {
 			str = str.substring(substring.length);
 		}
 	});
