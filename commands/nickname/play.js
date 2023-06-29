@@ -8,7 +8,7 @@ module.exports = {
 		var baseNickname = getBaseNickname(interaction.member.nickname, tag)
 		try {
 			await interaction.member.setNickname(baseNickname);
-			await interaction.reply(`${baseNickname} is now playing.`);
+			await interaction.reply(`${baseNickname} is now ready to play.`);
 		} 
 		catch (error) {
 			console.error(error);
