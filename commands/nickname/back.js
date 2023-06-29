@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('brb')
+		.setName('back')
 		.setDescription('Remove the [BRB] or [AFK] tag'),
 	async execute(interaction) {
 		var tag = " [BRB]"
