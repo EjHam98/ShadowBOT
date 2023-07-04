@@ -5,7 +5,9 @@ module.exports = {
 		.setName('play')
 		.setDescription('Remove all tags to join as a player'),
 	async execute(interaction) {
+		var tag = "!";
 		var baseNickname = getBaseNickname(interaction.member.nickname || interaction.user.username, tag)
+
 		try {
 			await interaction.member.setNickname(baseNickname);
 			await interaction.reply(`${baseNickname} is now ready to play.`);
