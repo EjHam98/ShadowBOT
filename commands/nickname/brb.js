@@ -7,27 +7,11 @@ module.exports = {
 	async execute(interaction) {
 		var tag = " [BRB]"
 		var afktag = " [AFK]"
-		if (interaction.member.nickname.endsWith(afktag)){
-			var newUsername = interaction.member.nickname.slice(0, -tag.length);;
-			try {
-				await interaction.member.setNickname(newUsername);
-			} 
-			catch (error) {
-				console.error(error);
-				await interaction.reply('Failed to update username.');
-			}
-			newUsername = `${interaction.member.nickname}${tag}`;
-			try {
-				await interaction.member.setNickname(newUsername);
-				await interaction.reply(`${interaction.member.nickname} is now BRB.`);
-			} 
-			catch (error) {
-				console.error(error);
-				await interaction.reply('Failed to update username.');
-			}
-		}
-		if (interaction.member.nickname.endsWith(tag)){
-			var newUsername = interaction.member.nickname.slice(0, -tag.length);;
+
+		var currNickname = interaction.member.nickname || interaction.user.username;
+
+		if (currNickname.endsWith(afktag) || currNickname.endsWith(tag)){
+			var newUsername = currNickname.slice(0, -tag.length);;
 			try {
 				await interaction.member.setNickname(newUsername);
 				await interaction.reply(`${newUsername} is no longer BRB.`);
@@ -38,10 +22,10 @@ module.exports = {
 			}
 		}
 		else{
-			var newUsername = `${interaction.member.nickname}${tag}`;
+			newUsername = `${currNickname}${tag}`;
 			try {
 				await interaction.member.setNickname(newUsername);
-				await interaction.reply(`${interaction.member.nickname} is now BRB.`);
+				await interaction.reply(`${currNickname} is now BRB.`);
 			} 
 			catch (error) {
 				console.error(error);

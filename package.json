@@ -1,25 +1,26 @@
 {
-  "name": "clockwise",
+  "name": "shadowbot",
   "version": "1.0.0",
-  "description": "A Blood on the Clocktower Discord bot used to organise roles",
+  "description": "A Blood on the Clocktower Discord bot",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/phypoh/ClockWise.git"
+    "url": "git+https://github.com/EjHam98/ShadowBOT.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "LieutenantDV20 and physiX",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/phypoh/ClockWise/issues"
+    "url": "https://github.com/EjHam98/ShadowBOT/issues"
   },
-  "homepage": "https://github.com/phypoh/ClockWise#readme",
+  "homepage": "https://github.com/EjHam98/ShadowBOT#readme",
   "dependencies": {
     "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
     "request-promise-native": "^0.0.0"
-  }
+  },
+  "devDependencies": {}
 }

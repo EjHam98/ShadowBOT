@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('brb')
+		.setName('new')
 		.setDescription('Add/remove the [N] tag for New Players'),
 	async execute(interaction) {
 		var tag = " [N]"

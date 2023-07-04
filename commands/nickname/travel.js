@@ -7,7 +7,7 @@ module.exports = {
 	async execute(interaction) {
 		var tag = "(T) ";
 
-		var baseNickname = getBaseNickname(interaction.member.nickname, tag)
+		var baseNickname = getBaseNickname(interaction.member.nickname || interaction.user.username, tag)
 
 		if (baseNickname.startsWith(tag)){
 			var newNickname = baseNickname.substring(tag.length);
