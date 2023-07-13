@@ -31,21 +31,40 @@ module.exports = {
 	
 		// https://discordjs.guide/message-components/interactions.html
 		const collectorFilter = i => true;
-		try {
+		// try {
 			const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
 
 			if (confirmation.customId === 'confirm') {
 				// Do channel movement shennanigans things here
+				
+				const consultCategory = interaction.member.voice.channel.parent;
+				const consultSubstring = 'consult';
 
+				// consultCategory.children.cache.forEach([channelId, channel]=> {
+				// 	// if (channel.toLowerCase().includes(consultSubstring)){
+				// 	// 	await confirmation.update({ content: `Debug: ${channel}`, components: [] });
+				// 	// }
+				// 	await confirmation.update({ content: `Debug: ${channel}`, components: [] });
+				// })
 
+				const consultChannel = consultCategory.children.cache.filter(channel => 
+					channel.type === 'GUILD_VOICE' && 
+					channel.name.toLowerCase().includes(consultSubstring) && 
+					channel.parentId === consultCategory.id
+				);
 
-				await confirmation.update({ content: `Consult accepted`, components: [] });
+				// await interaction.member.voice.setChannel(consultChannel);
+				await confirmation.update({ content: `Debug: ${typeof(consultChannel)}`, components: [] });
+				
+				// await confirmation.update({ content: `Debug: ${consultCategory.children}`, components: [] });
+
+				// await confirmation.update({ content: `Consult accepted`, components: [] });
 			} else if (confirmation.customId === 'cancel') {
 				await confirmation.update({ content: 'Action cancelled', components: [] });
 			}
-		} catch (e) {
-			await interaction.editReply({ content: 'ST has not responded to ST consult request, cancelling', components: [] });
-		}
+		// } catch (e) {
+		// 	await interaction.editReply({ content: 'An error has occurred. Please try again.', components: [] });
+		// }
 	}
 
 };
