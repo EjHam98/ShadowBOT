@@ -35,33 +35,40 @@ module.exports = {
 		const cost_tag = '(co-st)'
 
 		// https://discordjs.guide/message-components/interactions.html
-		const collectorFilter = i => ( i.member.nickname.toLowerCase().includes(st_tag) || i.member.nickname.toLowerCase().includes(cost_tag) ) ;
+		// const collectorFilter = i => ( i.member.nickname.toLowerCase().includes(st_tag) || i.member.nickname.toLowerCase().includes(cost_tag) ) ;
 		try {
-			const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
+			const confirmation = await response.awaitMessageComponent({  time: 120_000 });
 
-			if (confirmation.customId === 'confirm') {
-				// Do channel movement shennanigans things here
-				
-				const consultCategory = interaction.member.voice.channel.parent;
-				const consultSubstring = 'consult';
+			if (confirmation.member.nickname.toLowerCase().startsWith(st_tag) || confirmation.member.nickname.toLowerCase().startsWith(cost_tag)){
+				if (confirmation.customId === 'confirm') {
+					// Do channel movement shennanigans things here
+					
+					const consultCategory = interaction.member.voice.channel.parent;
+					const consultSubstring = 'consult';
+	
+					// https://discord-api-types.dev/api/discord-api-types-v10/enum/ChannelType#GuildVoice 
+					const consultChannel = consultCategory.children.cache.find(channel => 
+						channel.type === ChannelType.GuildVoice && //"GuildVoice"
+						channel.name.toLowerCase().includes(consultSubstring) && 
+						channel.parentId === consultCategory.id
+					);
+					
+					await confirmation.member.voice.setChannel(consultChannel);
+					await interaction.member.voice.setChannel(consultChannel);
+	
+					// await confirmation.update({ content: `Debug: ${confirmation.member.nickname}`, components: [] });
+	
+					await confirmation.update({ content: `Consult accepted`, components: [] });
+				} else if (confirmation.customId === 'cancel') {
+					await confirmation.update({ content: 'Action cancelled', components: [] });
+				}
 
-				// https://discord-api-types.dev/api/discord-api-types-v10/enum/ChannelType#GuildVoice 
-				const consultChannel = consultCategory.children.cache.find(channel => 
-					channel.type === ChannelType.GuildVoice && //"GuildVoice"
-					channel.name.toLowerCase().includes(consultSubstring) && 
-					channel.parentId === consultCategory.id
-				);
-				
-				// await 
-				await confirmation.member.voice.setChannel(consultChannel);
-				await interaction.member.voice.setChannel(consultChannel);
-
-				// await confirmation.update({ content: `Debug: ${confirmation.member.nickname}`, components: [] });
-
-				await confirmation.update({ content: `Consult accepted`, components: [] });
-			} else if (confirmation.customId === 'cancel') {
-				await confirmation.update({ content: 'Action cancelled', components: [] });
 			}
+			else {
+				await confirmation.reply({ content: `Nice try, ${(confirmation.user)}. You're not the ST.`, ephermal: true });
+			}
+
+			
 
 			// https://discordjs.guide/message-components/interactions.html
 
