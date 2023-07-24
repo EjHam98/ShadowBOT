@@ -1,10 +1,11 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ChannelType } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('consult')
-		.setDescription('Ask Storyteller for a consultation.'),
-
+		.setDescription('Ask Storyteller for a consultation.')
+		,
+		
 		
 	async execute(interaction) {
 
@@ -29,9 +30,13 @@ module.exports = {
 			components: [row],
 		});
 	
+
+		const st_tag = '(st)'
+		const cost_tag = '(co-st)'
+
 		// https://discordjs.guide/message-components/interactions.html
-		const collectorFilter = i => true;
-		// try {
+		const collectorFilter = i => ( i.member.nickname.toLowerCase().includes(st_tag) || i.member.nickname.toLowerCase().includes(cost_tag) ) ;
+		try {
 			const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
 
 			if (confirmation.customId === 'confirm') {
@@ -40,31 +45,30 @@ module.exports = {
 				const consultCategory = interaction.member.voice.channel.parent;
 				const consultSubstring = 'consult';
 
-				// consultCategory.children.cache.forEach([channelId, channel]=> {
-				// 	// if (channel.toLowerCase().includes(consultSubstring)){
-				// 	// 	await confirmation.update({ content: `Debug: ${channel}`, components: [] });
-				// 	// }
-				// 	await confirmation.update({ content: `Debug: ${channel}`, components: [] });
-				// })
-
-				const consultChannel = consultCategory.children.cache.filter(channel => 
-					channel.type === 'GUILD_VOICE' && 
+				// https://discord-api-types.dev/api/discord-api-types-v10/enum/ChannelType#GuildVoice 
+				const consultChannel = consultCategory.children.cache.find(channel => 
+					channel.type === ChannelType.GuildVoice && //"GuildVoice"
 					channel.name.toLowerCase().includes(consultSubstring) && 
 					channel.parentId === consultCategory.id
 				);
-
-				// await interaction.member.voice.setChannel(consultChannel);
-				await confirmation.update({ content: `Debug: ${typeof(consultChannel)}`, components: [] });
 				
-				// await confirmation.update({ content: `Debug: ${consultCategory.children}`, components: [] });
+				// await 
+				await confirmation.member.voice.setChannel(consultChannel);
+				await interaction.member.voice.setChannel(consultChannel);
 
-				// await confirmation.update({ content: `Consult accepted`, components: [] });
+				// await confirmation.update({ content: `Debug: ${confirmation.member.nickname}`, components: [] });
+
+				await confirmation.update({ content: `Consult accepted`, components: [] });
 			} else if (confirmation.customId === 'cancel') {
 				await confirmation.update({ content: 'Action cancelled', components: [] });
 			}
-		// } catch (e) {
-		// 	await interaction.editReply({ content: 'An error has occurred. Please try again.', components: [] });
-		// }
+
+			// https://discordjs.guide/message-components/interactions.html
+
+		} catch (e) {
+			await interaction.editReply({ content: 'An error has occurred. Please try again.', components: [] });
+		}
+
 	}
 
 };
