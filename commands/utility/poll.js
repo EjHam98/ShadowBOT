@@ -59,29 +59,60 @@ module.exports = {
 
 		const collector = response.createMessageComponentCollector({ time: 600_000 });
 
-		collector.on('collect', async i => {
-			// const selection = i.values[0];
-			
+		collector.on('collect', async i => {			
 			if ((i.member.nickname || i.user.username).startsWith("!")){
 				await i.reply({ content: `Nice try, ${i.user}. Spectators can't vote.`, ephermal: true });
 			}
 			else {
+				const toEditEmbed = i.message.embeds[0];
 				switch (i.customId){
-
-					case "tb":
-	
+					case "tb":{
+						X = 0;
 						break;
-					case "snv":
-	
+					}
+					case "snv":{
+						X = 1;
 						break;
-					case "bmr":
-	
+					}
+					case "bmr":{
+						X = 3;
 						break
-					case "custom":
-	
+					}
+					case "custom":{
+						X = 4;
 						break
+					}
 				}
-				await i.reply(`${i.user} has pressed a button with response ${i.customId}!`);
+
+				const playerField = toEditEmbed.fields[X];
+				// playerField.value = playerField.value.concat(`${i.user} \n`)
+				playerList = playerField.value.split(" \n");
+
+
+				if (playerList.includes(`${i.user}`)){
+					playerList = playerList.filter(function(item) {
+						return item !== `${i.user}`;
+					})
+
+					if (playerList.length === 0){
+						playerList.push(`NIL`);
+					}
+				}
+				else{
+					if (playerList.includes(`NIL`)){
+						playerList = playerList.filter(function(item) {
+							return item !== `NIL`;
+						})
+					}
+					playerList.push(`${i.user}`);
+
+				}
+
+				const newPlayerList = playerList.join([seperator = ' \n']);
+				playerField.value = newPlayerList
+
+				await interaction.editReply({embeds: [toEditEmbed]})
+				await i.deferUpdate();
 			}
 			
 		});
