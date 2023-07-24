@@ -42,11 +42,11 @@ module.exports = {
 			.setDescription('Click on the buttons below to vote!')
 			.setThumbnail('https://cdn.icon-icons.com/icons2/1369/PNG/512/-poll_89868.png')
 			.addFields(
-				{ name: 'Trouble Brewing', value: 'NIL', inline: true},
-				{ name: 'Sects & Violets', value: 'NIL', inline: true },
+				{ name: 'Trouble Brewing', value: '0', inline: true},
+				{ name: 'Sects & Violets', value: '0', inline: true },
 				{ name: ' ', value: ' ' },
-				{ name: 'Bad Moon Rising', value: 'NIL', inline: true },
-				{ name: 'Custom Scripts', value: 'NIL', inline: true },
+				{ name: 'Bad Moon Rising', value: '0', inline: true },
+				{ name: 'Custom Scripts', value: '0', inline: true },
 			)
 			.setFooter({ text: '!!! Only players without the spectator tag may vote.' });
 
@@ -85,7 +85,6 @@ module.exports = {
 				}
 
 				const playerField = toEditEmbed.fields[X];
-				// playerField.value = playerField.value.concat(`${i.user} \n`)
 				playerList = playerField.value.split(" \n");
 
 
@@ -93,20 +92,13 @@ module.exports = {
 					playerList = playerList.filter(function(item) {
 						return item !== `${i.user}`;
 					})
-
-					if (playerList.length === 0){
-						playerList.push(`NIL`);
-					}
 				}
 				else{
-					if (playerList.includes(`NIL`)){
-						playerList = playerList.filter(function(item) {
-							return item !== `NIL`;
-						})
-					}
 					playerList.push(`${i.user}`);
 
 				}
+
+				playerList[0] = parseInt(playerList[0]) + 1;
 
 				const newPlayerList = playerList.join([seperator = ' \n']);
 				playerField.value = newPlayerList
